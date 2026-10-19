@@ -1,0 +1,55 @@
+name: Browser smoke
+
+# Boots the real managed editor — EditorHostController plus the native
+# op-host-web-server from the published platform runtime — and drives the
+# editor page in Chromium. Complements check.yml: the plugin job tests the
+# host API surface over fetch with a fake host; this job runs the published
+# runtime and the actual browser page. Advisory: not a required check.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    name: Playwright smoke (managed editor)
+    # Draft PRs skip the smoke; ready_for_review above re-triggers it.
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NODE_VERSION: "24.11.0"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # pnpm build reads the pinned OpenPencil submodule (same as the
+          # plugin job in check.yml); the editor binary itself is staged from
+          # the published platform package below.
+          submodules: recursive
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install JavaScript dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Stage the published editor runtime
+        run: node scripts/stage-published-runtime.mjs
+
+      - name: Install Chromium for Playwright
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Browser smoke against the managed editor
+        run: pnpm run test:e2e

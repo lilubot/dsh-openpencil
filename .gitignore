@@ -25,3 +25,6 @@ npm/*/openpencil-runtime.json
 # Local visual acceptance evidence may contain workspace or conversation data.
 artifacts/
 dsh-actual-*.png
+
+# Playwright smoke run output (traces, error contexts).
+tests/e2e/out/
