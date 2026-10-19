@@ -330,6 +330,8 @@ Never commit `.npmrc`, `NPM_TOKEN`, or copied registry credentials. This reposit
 
 `test:host` performs a real exact render, validates PNG IHDR geometry and SHA-256, exercises immutable image/document capabilities over HTTP, starts the staged managed editor, pushes a live selection, applies an MCP mutation, saves, and proves that the latest bytes reopen. The expected dimensions are fixture-specific.
 
+`test:e2e` is the browser smoke: it stages the published platform runtime (`pnpm run stage:published-runtime`), boots the real managed editor through `EditorHostController`, and drives the editor page in headless Chromium — the canvas must mount, the app's `op-smoke:ok` boot marker must appear, and pointer interaction must keep the in-page error pane empty.
+
 ## Ecosystem
 
 DSH OpenPencil is the DeepSeek Harness plugin for **[OpenPencil](https://github.com/ZSeven-W/openpencil)** — the world's first open-source AI-native vector design tool — and part of the **[ZSeven-W](https://github.com/ZSeven-W)** family of pure-Rust, AI-native tools.

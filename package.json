@@ -60,6 +60,8 @@
     "test:design-quality": "pnpm run build && node --test tests/design-quality.test.mjs tests/new-tool.test.mjs",
     "test:mcp": "pnpm run build && node --test tests/mcp-client.test.mjs",
     "test:host": "pnpm run build && node scripts/test-host.mjs",
+    "test:e2e": "pnpm run build && playwright test --config tests/e2e/playwright.config.mjs",
+    "stage:published-runtime": "node scripts/stage-published-runtime.mjs",
     "build:editor-web": "node scripts/build-editor-web.mjs",
     "build:editor-runtime": "node scripts/build-editor-runtime.mjs",
     "stage:editor-runtime": "node scripts/stage-editor-runtime.mjs",
@@ -96,9 +98,9 @@
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1",
     "@deepseek-ai/dsh-client-locale": "0.1.5-rc.1",
+    "@deepseek-ai/dsh-client-ui-conversation": "0.1.5-rc.1",
     "@deepseek-ai/dsh-client-ui-renderer": "0.1.5-rc.1",
     "@deepseek-ai/dsh-client-ui-session": "0.1.5-rc.1",
-    "@deepseek-ai/dsh-client-ui-conversation": "0.1.5-rc.1",
     "@deepseek-ai/dsh-client-ui-slots": "0.1.5-rc.1",
     "@deepseek-ai/dsh-client-ui-theme": "0.1.5-rc.1",
     "@deepseek-ai/dsh-client-ui-tool": "0.1.5-rc.1",
@@ -119,12 +121,13 @@
     "@zseven-w/dsh-openpencil-win32-x64": "0.1.0-rc.10"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "@types/node": "^22.0.0",
     "@types/react": "~18.3.1",
     "@types/react-dom": "~18.3.1",
+    "esbuild": "^0.28.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "esbuild": "^0.28.2",
     "tsdown": "^0.22.2",
     "typescript": "^6.0.3"
   }
